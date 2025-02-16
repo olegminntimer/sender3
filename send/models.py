@@ -1,6 +1,25 @@
 from django.db import models
 
-# Create your models here.
+
+class Message(models.Model):
+    subject = models.CharField(
+        max_length=150, verbose_name="Тема письма", help_text="Введите тему письма"
+    )
+    letter_body = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Текст письма",
+        help_text="Введите содержимое письма",
+    )
+
+    class Meta:
+        verbose_name = "Письмо"
+        verbose_name_plural = "Письма"
+
+    def __str__(self):
+        return self.subject
+
+
 class Newsletter(models.Model):
     '''Модель рассылки'''
     COMPLETED = 'completed'
