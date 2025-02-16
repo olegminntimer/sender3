@@ -1,6 +1,34 @@
 from django.db import models
 
 
+class Recipient(models.Model):
+    email = models.CharField(
+        unique=True,
+        max_length=150, verbose_name="Email клиента", help_text="Введите email клиента"
+    )
+    name = models.CharField(
+        max_length=150,
+        verbose_name="Ф.И.О. клиента",
+        help_text="Введите Ф.И.О. клиента",
+    )
+    comment = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Комментарий",
+        help_text="Введите комментарий",
+    )
+
+    class Meta:
+        verbose_name = "Клиент"
+        verbose_name_plural = "Клиенты"
+        ordering = [
+            "name",
+        ]
+
+    def __str__(self):
+        return self.name
+
+
 class Message(models.Model):
     subject = models.CharField(
         max_length=150, verbose_name="Тема письма", help_text="Введите тему письма"
@@ -21,7 +49,7 @@ class Message(models.Model):
 
 
 class Newsletter(models.Model):
-    '''Модель рассылки'''
+    '''Модель «Рассылка»'''
     COMPLETED = 'completed'
     CREATED = 'created'
     LAUNCHED = 'launched'
