@@ -102,3 +102,55 @@ class Newsletter(models.Model):
 
     def __str__(self):
         return f'{self.date_and_time_of_first_dispatch} {self.status}'
+
+
+class AttemptToSend(models.Model):
+    '''Модель «Попытка рассылки»'''
+    SUCCESSFUL = 'Successful'
+    NOT_SUCCESSFUL = 'Not successful'
+
+    STATUS = [
+        (SUCCESSFUL, 'Успешно'),
+        (NOT_SUCCESSFUL, 'Не успешно'),
+    ]
+    # Дата и время попытки (datetime).
+    date_and_time_of_attempt = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+        null=True,
+        verbose_name="Дата и время попытки",
+        help_text="Дата и время попытки рассылки",
+    )
+    # Статус (строка: 'Успешно', 'Не успешно').
+    status = models.CharField(
+        max_length=14,
+        choices=STATUS,
+        verbose_name='Статус попытки рассылки'
+    )
+    # Ответ почтового сервера (текст).
+    mail_server_response = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name='Ответ почтового сервера'
+    )
+    # Рассылка (внешний ключ на модель «Рассылка»).
+    newsletter = models.ForeignKey(
+        Newsletter,
+        verbose_name="Рассылка",
+        help_text="Укажите рассылку",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="attempts_to_send",
+    )
+
+    class Meta:
+        verbose_name = "Попытка рассылки"
+        verbose_name_plural = "Попытки рассылки"
+        ordering = [
+            "date_and_time_of_attempt",
+        ]
+
+    def __str__(self):
+        return f'{self.date_and_time_of_attempt} {self.status}'
