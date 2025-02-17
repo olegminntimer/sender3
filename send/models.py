@@ -4,12 +4,12 @@ from django.db import models
 class Recipient(models.Model):
     email = models.CharField(
         unique=True,
-        max_length=150, verbose_name="Email клиента", help_text="Введите email клиента"
+        max_length=150, verbose_name="Email получателя", help_text="Введите email получателя"
     )
     name = models.CharField(
         max_length=150,
-        verbose_name="Ф.И.О. клиента",
-        help_text="Введите Ф.И.О. клиента",
+        verbose_name="Ф.И.О. получателя",
+        help_text="Введите Ф.И.О. получателя",
     )
     comment = models.TextField(
         blank=True,
@@ -19,8 +19,8 @@ class Recipient(models.Model):
     )
 
     class Meta:
-        verbose_name = "Клиент"
-        verbose_name_plural = "Клиенты"
+        verbose_name = "получатель"
+        verbose_name_plural = "получатели"
         ordering = [
             "name",
         ]
@@ -41,8 +41,8 @@ class Message(models.Model):
     )
 
     class Meta:
-        verbose_name = "Письмо"
-        verbose_name_plural = "Письма"
+        verbose_name = "письмо"
+        verbose_name_plural = "письма"
 
     def __str__(self):
         return self.subject
@@ -97,8 +97,8 @@ class Newsletter(models.Model):
     )
 
     class Meta:
-        verbose_name = "Рассылка"
-        verbose_name_plural = "Рассылки"
+        verbose_name = "рассылка"
+        verbose_name_plural = "рассылки"
 
     def __str__(self):
         return f'{self.date_and_time_of_first_dispatch} {self.status}'
@@ -146,8 +146,8 @@ class AttemptToSend(models.Model):
     )
 
     class Meta:
-        verbose_name = "Попытка рассылки"
-        verbose_name_plural = "Попытки рассылки"
+        verbose_name = "попытка рассылки"
+        verbose_name_plural = "попытки рассылки"
         ordering = [
             "date_and_time_of_attempt",
         ]

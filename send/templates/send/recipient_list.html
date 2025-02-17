@@ -1,0 +1,12 @@
+{% extends 'send/base.html' %}
+{% block content %}
+<div class="alert alert-primary" role="alert">
+    Всего - {{newsletters|length}}
+</div>
+<div class="alert alert-primary" role="alert">
+    Запущено - {{newsletters_launched|length}}
+</div>
+<div class="alert alert-primary" role="alert">
+    Количество уникальных получателей - {{recipients|length}}
+</div>
+{% endblock %}
