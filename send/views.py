@@ -44,3 +44,8 @@ class RecipientDetailView(DetailView):
     model = Recipient
     form_class = RecipientForm
     success_url = reverse_lazy("send:recipient_list")
+
+
+class RecipientDeleteView(DeleteView):
+    model = Recipient
+    success_url = reverse_lazy("send:recipient_list")
