@@ -1,7 +1,22 @@
+from django.shortcuts import render
 from django.views.generic import DeleteView, DetailView, ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
-from .models import Recipient
+
+from .forms import RecipientForm
+from .models import Recipient, Newsletter
+
+
+
+def main_view(request):
+    recipients = Recipient.objects.all()
+    newsletters = Newsletter.objects.all()
+    context = {
+        'recipients': recipients,
+        'newsletters': newsletters,
+    }
+    return render(request, 'send/main.html', context)
+
 
 
 class RecipientListView(ListView):
@@ -10,11 +25,21 @@ class RecipientListView(ListView):
     def get_context_data(self, **kwargs):
         recipients = Recipient.objects.all()
         context = super().get_context_data(**kwargs)
-        context['recipients'] = recipients
+        context["recipients"] = recipients
         return context
+
 
 class RecipientCreateView(CreateView):
     model = Recipient
-    fields = ['email', 'name', 'comment']
-    template_name = 'recipient_form.html'
-    success_url = reverse_lazy('recipient_list')
+    form_class = RecipientForm
+    success_url = reverse_lazy("send:recipient_list")
+
+
+class RecipientUpdateView(UpdateView):
+    model = Recipient
+    form_class = RecipientForm
+    success_url = reverse_lazy("send:recipient_list")
+
+
+class RecipientDetailView(DetailView):
+    model = Recipient

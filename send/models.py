@@ -3,8 +3,7 @@ from django.db import models
 
 class Recipient(models.Model):
     email = models.CharField(
-        unique=True,
-        max_length=150, verbose_name="Email получателя", help_text="Введите email получателя"
+        unique=True, max_length=150, verbose_name="Email получателя", help_text="Введите email получателя"
     )
     name = models.CharField(
         max_length=150,
@@ -30,9 +29,7 @@ class Recipient(models.Model):
 
 
 class Message(models.Model):
-    subject = models.CharField(
-        max_length=150, verbose_name="Тема письма", help_text="Введите тему письма"
-    )
+    subject = models.CharField(max_length=150, verbose_name="Тема письма", help_text="Введите тему письма")
     letter_body = models.TextField(
         blank=True,
         null=True,
@@ -49,15 +46,16 @@ class Message(models.Model):
 
 
 class Newsletter(models.Model):
-    '''Модель «Рассылка»'''
-    COMPLETED = 'completed'
-    CREATED = 'created'
-    LAUNCHED = 'launched'
+    """Модель «Рассылка»"""
+
+    COMPLETED = "completed"
+    CREATED = "created"
+    LAUNCHED = "launched"
 
     STATUS = [
-        (COMPLETED, 'Завершена'),
-        (CREATED, 'Создана'),
-        (LAUNCHED, 'Запущена'),
+        (COMPLETED, "Завершена"),
+        (CREATED, "Создана"),
+        (LAUNCHED, "Запущена"),
     ]
     # Дата и время первой отправки (datetime)
     date_and_time_of_first_dispatch = models.DateTimeField(
@@ -74,11 +72,7 @@ class Newsletter(models.Model):
         help_text="Дата и время окончания отправки ",
     )
     # Статус (строка: 'Завершена', 'Создана', 'Запущена').
-    status = models.CharField(
-        max_length=9,
-        choices=STATUS,
-        verbose_name='Статус рассылки'
-    )
+    status = models.CharField(max_length=9, choices=STATUS, verbose_name="Статус рассылки")
     # Сообщение (внешний ключ на модель «Сообщение»).
     message = models.ForeignKey(
         Message,
@@ -101,17 +95,18 @@ class Newsletter(models.Model):
         verbose_name_plural = "рассылки"
 
     def __str__(self):
-        return f'{self.date_and_time_of_first_dispatch} {self.status}'
+        return f"{self.date_and_time_of_first_dispatch} {self.status}"
 
 
 class AttemptToSend(models.Model):
-    '''Модель «Попытка рассылки»'''
-    SUCCESSFUL = 'Successful'
-    NOT_SUCCESSFUL = 'Not successful'
+    """Модель «Попытка рассылки»"""
+
+    SUCCESSFUL = "Successful"
+    NOT_SUCCESSFUL = "Not successful"
 
     STATUS = [
-        (SUCCESSFUL, 'Успешно'),
-        (NOT_SUCCESSFUL, 'Не успешно'),
+        (SUCCESSFUL, "Успешно"),
+        (NOT_SUCCESSFUL, "Не успешно"),
     ]
     # Дата и время попытки (datetime).
     date_and_time_of_attempt = models.DateTimeField(
@@ -122,17 +117,10 @@ class AttemptToSend(models.Model):
         help_text="Дата и время попытки рассылки",
     )
     # Статус (строка: 'Успешно', 'Не успешно').
-    status = models.CharField(
-        max_length=14,
-        choices=STATUS,
-        verbose_name='Статус попытки рассылки'
-    )
+    status = models.CharField(max_length=14, choices=STATUS, verbose_name="Статус попытки рассылки")
     # Ответ почтового сервера (текст).
     mail_server_response = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True,
-        verbose_name='Ответ почтового сервера'
+        max_length=200, blank=True, null=True, verbose_name="Ответ почтового сервера"
     )
     # Рассылка (внешний ключ на модель «Рассылка»).
     newsletter = models.ForeignKey(
@@ -153,4 +141,4 @@ class AttemptToSend(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.date_and_time_of_attempt} {self.status}'
+        return f"{self.date_and_time_of_attempt} {self.status}"

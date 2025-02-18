@@ -6,24 +6,40 @@ from send.models import Recipient, Message, Newsletter, AttemptToSend
 # Register your models here.
 @admin.register(Recipient)
 class RecipientAdmin(admin.ModelAdmin):
-    list_display = ('email', 'name', 'comment')
-    list_filter = ('email',)
-    search_fields = ('email', 'name',)
+    list_display = ("email", "name", "comment")
+    list_filter = ("email",)
+    search_fields = (
+        "email",
+        "name",
+    )
+
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'letter_body')
-    list_filter = ('subject',)
-    search_fields = ('subject', 'letter_body')
+    list_display = ("subject", "letter_body")
+    list_filter = ("subject",)
+    search_fields = ("subject", "letter_body")
+
 
 @admin.register(Newsletter)
 class NewsletterAdmin(admin.ModelAdmin):
-    list_display = ('date_and_time_of_first_dispatch', 'date_and_time_of_end_of_sending', 'status', 'message',)
-    list_filter = ('status',)
-    search_fields = ('status', 'message')
+    list_display = (
+        "date_and_time_of_first_dispatch",
+        "date_and_time_of_end_of_sending",
+        "status",
+        "message",
+    )
+    list_filter = ("status",)
+    search_fields = ("status", "message")
+
 
 @admin.register(AttemptToSend)
 class AttemptToSendAdmin(admin.ModelAdmin):
-    list_display = ('date_and_time_of_attempt', 'status', 'mail_server_response', 'newsletter',)
-    list_filter = ('status',)
-    search_fields = ('status',)
+    list_display = (
+        "date_and_time_of_attempt",
+        "status",
+        "mail_server_response",
+        "newsletter",
+    )
+    list_filter = ("status",)
+    search_fields = ("status",)
