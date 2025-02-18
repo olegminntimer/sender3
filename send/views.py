@@ -18,7 +18,6 @@ def main_view(request):
     return render(request, 'send/main.html', context)
 
 
-
 class RecipientListView(ListView):
     model = Recipient
 
@@ -43,3 +42,5 @@ class RecipientUpdateView(UpdateView):
 
 class RecipientDetailView(DetailView):
     model = Recipient
+    form_class = RecipientForm
+    success_url = reverse_lazy("send:recipient_list")
