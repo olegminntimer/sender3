@@ -8,4 +8,3 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ("email", "password1", "password2",)
-

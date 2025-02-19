@@ -8,6 +8,8 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=15, verbose_name='Телефон', blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
 
+    token = models.CharField(max_length=100, verbose_name='Токен', blank=True, null=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username',]
 
