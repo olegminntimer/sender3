@@ -3,9 +3,10 @@ import secrets
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
+from django.views.generic import DeleteView, DetailView, ListView
+from django.views.generic.edit import CreateView, UpdateView
 
-from users.forms import UserRegisterForm
+from users.forms import UserRegisterForm, UserForm
 from users.models import CustomUser
 
 from config.settings import EMAIL_HOST_USER
@@ -38,18 +39,9 @@ def email_verification(request, token):
     user.save()
     return redirect(reverse("users:login"))
 
-# template_name = 'register.html'
-#     form_class = CustomUserCreationForm
-#     success_url = reverse_lazy('home')
-#
-#     def form_valid(self, form):
-#         user = form.save()
-#         login(self.request, user)
-#         self.send_welcome_email(user.email)
-#         return super().form_valid(form)
-#
-#     def send_welcome_email(self, user_email):
-#         subject = 'Добро пожаловать в наш сервис'
-#         message = 'Спасибо, что зарегистрировались в нашем сервисе!'
-#         recipient_list = [user_email]
-#         send_mail(subject, message, recipient_list)
+
+class UserDetailView(DetailView):
+    model = CustomUser
+    form_class = UserForm
+    success_url = reverse_lazy("send:user_list")
+

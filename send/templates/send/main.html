@@ -5,19 +5,18 @@
       <h1 class="display-4 fw-normal text-body-emphasis">Статистика рассылок</h1>
 </div>
 <div class="alert alert-primary" role="alert">
-    <a class="btn" href="#" role="button">Всего - {{ newsletters | length }}</a>
+    Всего - {{ newsletters | length }}
 </div>
 <div class="alert alert-primary" role="alert">
-    <a class="btn" href="#" role="button">Запущено - {{ newsletters_launched | length }}</a>
+    Запущено - {{ newsletters_launched | length }}
 </div>
 <div class="alert alert-primary" role="alert">
-    <a class="btn" href="{% url 'send:recipient_list' %}" role="button">Количество уникальных получателей - {{ recipients | length }}</a>
+    Количество уникальных получателей - {{ recipients | length }}
 </div>
 {% else %}
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
 
     <h1 class="display-4 fw-normal text-body-emphasis">Сервис управления рассылками, администрирования и получения статистики</h1>
 </div>
-
 {% endif %}
 {% endblock %}

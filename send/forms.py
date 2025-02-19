@@ -1,6 +1,6 @@
 from django.forms import ModelForm, BooleanField
 
-from send.models import Recipient
+from send.models import Recipient, Message
 
 
 class StyleFormMixin:
@@ -16,4 +16,10 @@ class StyleFormMixin:
 class RecipientForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Recipient
+        fields = "__all__"
+
+
+class MessageForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Message
         fields = "__all__"
