@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import CustomUser
+
 
 class Recipient(models.Model):
     email = models.CharField(
@@ -16,6 +18,14 @@ class Recipient(models.Model):
         verbose_name="Комментарий",
         help_text="Введите комментарий",
     )
+    owner = models.ForeignKey(
+        CustomUser,
+        verbose_name="Владелец списка получателей",
+        help_text="Укажите владельца списка получателей",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )  # Владелец списка получателей.
 
     class Meta:
         verbose_name = "получатель"
@@ -36,6 +46,14 @@ class Message(models.Model):
         verbose_name="Текст письма",
         help_text="Введите содержимое письма",
     )
+    owner = models.ForeignKey(
+        CustomUser,
+        verbose_name="Владелец сообщения",
+        help_text="Укажите владельца сообщения",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )  # Владелец сообщения.
 
     class Meta:
         verbose_name = "письмо"
@@ -89,6 +107,14 @@ class Newsletter(models.Model):
         verbose_name="Получатели",
         help_text="Укажите получателей рассылки",
     )
+    owner = models.ForeignKey(
+        CustomUser,
+        verbose_name="Владелец рассылки",
+        help_text="Укажите владельца рассылки",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )  # Владелец рассылки.
 
     class Meta:
         verbose_name = "рассылка"
