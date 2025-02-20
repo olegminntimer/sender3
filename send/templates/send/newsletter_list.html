@@ -11,13 +11,16 @@
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for recipient in object_list %}
+            {% for newsletter in newsletters %}
             <div class="col">
               <div class="card shadow-sm">
                 <div class="card-body">
-                  <p class="card-text">{{ newsletter.email }}</p>
+                  <p class="card-text">{{ newsletter.message }}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
+                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_detail' newsletter.pk %}" role="button">Посмотреть</a>
+                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_update' newsletter.pk %}" role="button">Редактировать</a>
+                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_delete' newsletter.pk %}" role="button">Удалить</a>
                     </div>
                   </div>
                 </div>
