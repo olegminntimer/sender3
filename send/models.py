@@ -33,9 +33,7 @@ class Recipient(models.Model):
         ordering = [
             "name",
         ]
-        permissions = [
-            ("can_blocking_users", "Can blocking users"),
-        ]
+
 
     def __str__(self):
         return self.name
