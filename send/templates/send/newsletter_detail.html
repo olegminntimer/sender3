@@ -11,7 +11,7 @@
               <p class="card-text">Дата и время первой отправки: {{ object.date_and_time_of_first_dispatch }}</p>
               <p class="card-text">Дата и время окончания отправки: {{ object.date_and_time_of_end_of_sending }}</p>
               <p class="card-text">Статус: {{ object.status }}</p>
-              <p class="card-text">Получатели: {{ object.recipients }}</p>
+              <p class="card-text">Получатели: {% for recipient in newsletter.recipients.all %} {{ recipient }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <a class="btn btn-primary" href="{% url 'send:newsletter_list' %}" role="button">Назад</a>

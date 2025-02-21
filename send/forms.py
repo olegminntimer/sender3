@@ -16,17 +16,22 @@ class StyleFormMixin:
 class RecipientForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Recipient
-        fields = "__all__"
+        exclude = ("owner",)
+
+
+class RecipientManagerForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Recipient
+        exclude = '__all__'
 
 
 class MessageForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Message
-        fields = "__all__"
+        exclude = ("owner",)
 
 
 class NewsletterForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Newsletter
-        fields = "__all__"
-
+        exclude = ("owner",)

@@ -27,11 +27,15 @@ class Recipient(models.Model):
         on_delete=models.SET_NULL,
     )  # Владелец списка получателей.
 
+
     class Meta:
         verbose_name = "получатель"
         verbose_name_plural = "получатели"
         ordering = [
             "name",
+        ]
+        permissions = [
+            ("can_blocking_user", "Can blocking User"),
         ]
 
 
