@@ -1,0 +1,28 @@
+{% extends 'send/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Пользователи</h1>
+</div>
+{% endif %}
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for user in users %}
+            <div class="col">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <p class="card-text">{{ user.email }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <a class="btn btn-sm btn-outline-secondary" href="#" role="button">Редактировать</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+  </div>
+</div>
+{% endblock %}

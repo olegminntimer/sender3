@@ -16,6 +16,9 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        # permissions = [
+        #     ("can__recipient", "Can view recipient"),
+        # ]
 
 
     def __str__(self):

@@ -27,8 +27,10 @@ class RecipientListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["recipients"] = Recipient.objects.filter(owner=self.request.user)
-        context["recipients"] = Recipient.objects.all()
+        if self.request.user.has_perm('send.view_recipient'):
+            context["recipients"] = Recipient.objects.all()
+            return context
+        context["recipients"] = Recipient.objects.filter(owner=self.request.user)
         return context
 
 class RecipientCreateView(LoginRequiredMixin, CreateView):
@@ -107,6 +109,9 @@ class NewsletterListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        if self.request.user.has_perm('send.view_newsletter'):
+            context["newsletters"] = Newsletter.objects.all()
+            return context
         context["newsletters"] = Newsletter.objects.filter(owner=self.request.user)
         return context
 

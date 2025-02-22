@@ -45,3 +45,14 @@ class UserDetailView(DetailView):
     form_class = UserForm
     success_url = reverse_lazy("send:user_list")
 
+
+class UserListView(ListView):
+    model = CustomUser
+    template_name = 'user_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.has_perm('users.view_customuser'):
+            context["users"] = CustomUser.objects.all()
+            return context
+        return context

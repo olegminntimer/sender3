@@ -27,17 +27,15 @@ class Recipient(models.Model):
         on_delete=models.SET_NULL,
     )  # Владелец списка получателей.
 
-
     class Meta:
         verbose_name = "получатель"
         verbose_name_plural = "получатели"
         ordering = [
             "name",
         ]
-        permissions = [
-            ("can_blocking_user", "Can blocking User"),
-        ]
-
+        # permissions = [
+        #     ("can_view_recipient", "Can view recipient"),
+        # ]
 
     def __str__(self):
         return self.name
@@ -124,6 +122,9 @@ class Newsletter(models.Model):
     class Meta:
         verbose_name = "рассылка"
         verbose_name_plural = "рассылки"
+        # permissions = [
+        #     ("can_view_newsletter", "Can view newsletter"),
+        # ]
 
     def __str__(self):
         return f"{self.date_and_time_of_first_dispatch} {self.status}"
