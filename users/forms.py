@@ -14,4 +14,4 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 class UserForm(StyleFormMixin, ModelForm):
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        fields = ("is_active",)

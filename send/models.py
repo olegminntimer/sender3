@@ -33,9 +33,6 @@ class Recipient(models.Model):
         ordering = [
             "name",
         ]
-        # permissions = [
-        #     ("can_view_recipient", "Can view recipient"),
-        # ]
 
     def __str__(self):
         return self.name
@@ -118,13 +115,15 @@ class Newsletter(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )  # Владелец рассылки.
+    is_blocked = models.BooleanField(
+        default=False,
+        verbose_name="Признак блокировки",
+        help_text="Блокирована ли рассылка?",
+    )  # признак публикации (булевое поле),
 
     class Meta:
         verbose_name = "рассылка"
         verbose_name_plural = "рассылки"
-        # permissions = [
-        #     ("can_view_newsletter", "Can view newsletter"),
-        # ]
 
     def __str__(self):
         return f"{self.date_and_time_of_first_dispatch} {self.status}"

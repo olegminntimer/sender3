@@ -15,7 +15,7 @@
                   <p class="card-text">{{ user.email }}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                      <a class="btn btn-sm btn-outline-secondary" href="#" role="button">Редактировать</a>
+                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'users:user_update' user.pk %}" role="button">Редактировать</a>
                     </div>
                   </div>
                 </div>

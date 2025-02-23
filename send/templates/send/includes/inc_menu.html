@@ -20,12 +20,20 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
+                {% if not perms.users.view_customuser %}
                 <a class="nav-link" href="{% url 'send:main' %}">Главная</a>
+                {% endif %}
                 <a class="nav-link" href="{% url 'send:recipient_list' %}">Получатели</a>
+                {% if not perms.users.view_customuser %}
                 <a class="nav-link" href="{% url 'send:message_list' %}">Сообщения</a>
+                {% endif %}
                 <a class="nav-link" href="{% url 'send:newsletter_list' %}">Рассылки</a>
+                {% if not perms.users.view_customuser %}
                 <a class="nav-link" href="#">Попытки рассылок</a>
+                {% endif %}
+                {% if perms.users.view_customuser %}
                 <a class="nav-link" href="{% url 'users:user_list' %}">Пользователи</a>
+                {% endif %}
                 </div>
             </div>
         </div>
