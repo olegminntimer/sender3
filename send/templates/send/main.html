@@ -1,6 +1,6 @@
 {% extends 'send/base.html' %}
 {% block content %}
-{% if user.is_authenticated and not perms.users.view_customuser%}
+{% if user.is_authenticated and user.groups.get.name != 'manager' or user.is_superuser %}
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal text-body-emphasis">Статистика рассылок</h1>
 </div>

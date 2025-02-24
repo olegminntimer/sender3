@@ -33,6 +33,9 @@ class Recipient(models.Model):
         ordering = [
             "name",
         ]
+        permissions = [
+            ("can_view_recipient", "Can view Recipient"),
+        ]
 
     def __str__(self):
         return self.name
@@ -58,6 +61,9 @@ class Message(models.Model):
     class Meta:
         verbose_name = "письмо"
         verbose_name_plural = "письма"
+        permissions = [
+            ("can_view_message", "Can view Message"),
+        ]
 
     def __str__(self):
         return self.subject
@@ -124,6 +130,9 @@ class Newsletter(models.Model):
     class Meta:
         verbose_name = "рассылка"
         verbose_name_plural = "рассылки"
+        permissions = [
+            ("can_view_newsletter", "Can view Newsletter"),
+        ]
 
     def __str__(self):
         return f"{self.date_and_time_of_first_dispatch} {self.status}"
