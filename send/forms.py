@@ -29,3 +29,9 @@ class NewsletterForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Newsletter
         exclude = ("owner", "is_blocked")
+
+
+class NewsletterBlockForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Newsletter
+        fields = ("is_blocked",)

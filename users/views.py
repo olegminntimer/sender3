@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DeleteView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.models import Permission
 
 from users.forms import UserRegisterForm, UserForm
 from users.models import CustomUser
@@ -15,17 +14,6 @@ from config.settings import EMAIL_HOST_USER
 
 
 class UserListView(LoginRequiredMixin, ListView):
-    model = CustomUser
-    template_name = 'user_list.html'
-    context_object_name = 'users'
-
-    def get_queryset(self):
-        if self.request.user.has_perm('users.can_view_user'):
-            return CustomUser.objects.all()
-        return CustomUser.objects.none()
-
-
-class UserBlockListView(LoginRequiredMixin, ListView):
     model = CustomUser
     template_name = 'user_list.html'
     context_object_name = 'users'

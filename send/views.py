@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
 
-from .forms import RecipientForm, MessageForm, NewsletterForm
+from .forms import RecipientForm, MessageForm, NewsletterForm, NewsletterBlockForm
 from .models import Recipient, Newsletter, Message
 
 
@@ -141,6 +141,12 @@ class NewsletterCreateView(LoginRequiredMixin, CreateView):
 class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
     model = Newsletter
     form_class = NewsletterForm
+    success_url = reverse_lazy("send:newsletter_list")
+
+
+class NewsletterBlockView(LoginRequiredMixin, UpdateView):
+    model = Newsletter
+    form_class = NewsletterBlockForm
     success_url = reverse_lazy("send:newsletter_list")
 
 

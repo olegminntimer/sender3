@@ -31,7 +31,11 @@
                       {% endif %}
                       {% endif %}
                       {% if user.groups.get.name == 'manager' or user.is_superuser %}
-                      <a class="btn btn-sm btn-outline-secondary" href="#" role="button">Заблокировать</a>
+                      {% if newsletter.is_blocked %}
+                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Разблокировать</a>
+                      {% else %}
+                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Заблокировать</a>
+                      {% endif %}
                       {% endif %}
                     </div>
                   </div>
