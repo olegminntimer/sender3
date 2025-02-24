@@ -24,13 +24,9 @@
                 <a class="nav-link" href="{% url 'send:main' %}">Главная</a>
                 {% endif %}
                 <a class="nav-link" href="{% url 'send:recipient_list' %}">Получатели</a>
-                {% if user.groups.get.name != 'manager' %}
                 <a class="nav-link" href="{% url 'send:message_list' %}">Сообщения</a>
-                {% endif %}
                 <a class="nav-link" href="{% url 'send:newsletter_list' %}">Рассылки</a>
-                {% if user.groups.get.name != 'manager' %}
                 <a class="nav-link" href="#">Попытки рассылок</a>
-                {% endif %}
                 {% if user.groups.get.name == 'manager' or user.is_superuser %}
                 <a class="nav-link" href="{% url 'users:user_list' %}">Пользователи</a>
                 {% endif %}

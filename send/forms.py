@@ -19,12 +19,6 @@ class RecipientForm(StyleFormMixin, ModelForm):
         exclude = ("owner",)
 
 
-class RecipientManagerForm(StyleFormMixin, ModelForm):
-    class Meta:
-        model = Recipient
-        exclude = '__all__'
-
-
 class MessageForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Message
@@ -34,4 +28,4 @@ class MessageForm(StyleFormMixin, ModelForm):
 class NewsletterForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Newsletter
-        exclude = ("owner",)
+        exclude = ("owner", "is_blocked")

@@ -12,7 +12,7 @@ urlpatterns = [
     path("register/", UserCreateView.as_view(), name='register'),
     path("email-confirm/<str:token>/", email_verification, name='email-confirm'),
     path("<int:pk>/", UserDetailView.as_view(), name="user_detail"),
-    path("users/", UserListView.as_view(), name="user_list"),
+    path("", UserListView.as_view(), name="user_list"),
     path("<int:pk>/update/", UserUpdateView.as_view(), name="user_update"),
     # path("products/<int:pk>/delete/", RecipientDeleteView.as_view(), name="recipient_delete"),
 ]

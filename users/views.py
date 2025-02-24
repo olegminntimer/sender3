@@ -14,6 +14,28 @@ from users.models import CustomUser
 from config.settings import EMAIL_HOST_USER
 
 
+class UserListView(LoginRequiredMixin, ListView):
+    model = CustomUser
+    template_name = 'user_list.html'
+    context_object_name = 'users'
+
+    def get_queryset(self):
+        if self.request.user.has_perm('users.can_view_user'):
+            return CustomUser.objects.all()
+        return CustomUser.objects.none()
+
+
+class UserBlockListView(LoginRequiredMixin, ListView):
+    model = CustomUser
+    template_name = 'user_list.html'
+    context_object_name = 'users'
+
+    def get_queryset(self):
+        if self.request.user.has_perm('users.can_view_user'):
+            return CustomUser.objects.all()
+        return CustomUser.objects.none()
+
+
 class UserCreateView(LoginRequiredMixin, CreateView):
     model = CustomUser
     form_class = UserRegisterForm
@@ -22,27 +44,6 @@ class UserCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         user = form.save()
         user.is_active = False
-        # Назначение разрешений
-        add_recipient_permission = Permission.objects.get(codename='add_recipient')
-        change_recipient_permission = Permission.objects.get(codename='change_recipient')
-        delete_recipient_permission = Permission.objects.get(codename='delete_recipient')
-        view_recipient_permission = Permission.objects.get(codename='view_recipient')
-
-        add_newsletter_permission = Permission.objects.get(codename='add_newsletter')
-        change_newsletter_permission = Permission.objects.get(codename='change_newsletter')
-        delete_newsletter_permission = Permission.objects.get(codename='delete_newsletter')
-        view_newsletter_permission = Permission.objects.get(codename='view_newsletter')
-
-        add_message_permission = Permission.objects.get(codename='add_message')
-        change_message_permission = Permission.objects.get(codename='change_message')
-        delete_message_permission = Permission.objects.get(codename='delete_message')
-        view_message_permission = Permission.objects.get(codename='view_message')
-
-        user.user_permissions.add(add_recipient_permission, change_recipient_permission, delete_recipient_permission, \
-                                  view_recipient_permission, add_newsletter_permission, change_newsletter_permission, \
-                                  delete_newsletter_permission, view_newsletter_permission, add_message_permission, \
-                                  change_message_permission, delete_message_permission, view_message_permission)
-
         token = secrets.token_hex(16)
         user.token = token
         user.save()
@@ -67,17 +68,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form_class = UserForm
     success_url = reverse_lazy("users:user_list")
-
-
-class UserListView(LoginRequiredMixin, ListView):
-    model = CustomUser
-    template_name = 'user_list.html'
-    context_object_name = 'users'
-
-    def get_queryset(self):
-        if not self.request.user.has_perm('users.view_customuser'):
-            return CustomUser.objects.none()
-        return CustomUser.objects.all()
 
 
 class UserDetailView(DetailView):
