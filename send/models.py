@@ -31,7 +31,7 @@ class Recipient(models.Model):
         verbose_name = "получатель"
         verbose_name_plural = "получатели"
         ordering = [
-            "name",
+            "email",
         ]
         permissions = [
             ("can_view_recipient", "Can view Recipient"),
@@ -61,6 +61,9 @@ class Message(models.Model):
     class Meta:
         verbose_name = "письмо"
         verbose_name_plural = "письма"
+        ordering = [
+            "subject",
+        ]
         permissions = [
             ("can_view_message", "Can view Message"),
         ]
@@ -130,6 +133,9 @@ class Newsletter(models.Model):
     class Meta:
         verbose_name = "рассылка"
         verbose_name_plural = "рассылки"
+        ordering = [
+            "date_and_time_of_first_dispatch",
+        ]
         permissions = [
             ("can_view_newsletter", "Can view Newsletter"),
         ]
