@@ -99,7 +99,7 @@ class Newsletter(models.Model):
         help_text="Дата и время окончания отправки ",
     )
     # Статус (строка: 'Завершена', 'Создана', 'Запущена').
-    status = models.CharField(max_length=9, choices=STATUS, verbose_name="Статус рассылки")
+    status = models.CharField(max_length=9, choices=STATUS, default=CREATED, verbose_name="Статус рассылки", blank=True, null=True,)
     # Сообщение (внешний ключ на модель «Сообщение»).
     message = models.ForeignKey(
         Message,
@@ -147,12 +147,12 @@ class Newsletter(models.Model):
 class AttemptToSend(models.Model):
     """Модель «Попытка рассылки»"""
 
-    SUCCESSFUL = "Successful"
-    NOT_SUCCESSFUL = "Not successful"
+    SUCCESSFULLY = "successfully"
+    NOT_SUCCESSFULLY = "not_successfully"
 
     STATUS = [
-        (SUCCESSFUL, "Успешно"),
-        (NOT_SUCCESSFUL, "Не успешно"),
+        (SUCCESSFULLY, "Успешно"),
+        (NOT_SUCCESSFULLY, "Не успешно"),
     ]
     # Дата и время попытки (datetime).
     date_and_time_of_attempt = models.DateTimeField(
@@ -163,7 +163,7 @@ class AttemptToSend(models.Model):
         help_text="Дата и время попытки рассылки",
     )
     # Статус (строка: 'Успешно', 'Не успешно').
-    status = models.CharField(max_length=14, choices=STATUS, verbose_name="Статус попытки рассылки")
+    status = models.CharField(max_length=16, choices=STATUS, verbose_name="Статус попытки рассылки")
     # Ответ почтового сервера (текст).
     mail_server_response = models.CharField(
         max_length=200, blank=True, null=True, verbose_name="Ответ почтового сервера"

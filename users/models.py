@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import Group
 from django.db import models
 
 class CustomUser(AbstractUser):
