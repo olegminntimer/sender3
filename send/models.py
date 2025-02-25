@@ -124,11 +124,6 @@ class Newsletter(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )  # Владелец рассылки.
-    is_blocked = models.BooleanField(
-        default=False,
-        verbose_name="Признак блокировки",
-        help_text="Блокирована ли рассылка?",
-    )  # признак публикации (булевое поле),
 
     class Meta:
         verbose_name = "рассылка"

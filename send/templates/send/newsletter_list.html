@@ -14,34 +14,36 @@
     <div class="container">
         <div class="row row-cols-1 g-3">
             {% for newsletter in newsletters %}
-            <div class="col">
-              <div class="card shadow-sm">
-                <div class="card-body">
-                  <p class="card-text">Сообщение: {{ newsletter.message }}</p>
-                  <p class="card-text">Статус рассылки: {{ newsletter.status }}. Дата и время завершения : {{ newsletter.date_and_time_of_end_of_sending }}</p>
-                  <p class="card-text"></p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_detail' newsletter.pk %}" role="button">Посмотреть</a>
-                      {% if user.groups.get.name != 'manager' %}
-                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_update' newsletter.pk %}" role="button">Редактировать</a>
-                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_delete' newsletter.pk %}" role="button">Удалить</a>
-                      {% if not newsletter.is_blocked %}
-                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:attempttosend_create' %}" role="button">Запустить</a>
-                      {% endif %}
-                      {% endif %}
-                      {% if user.groups.get.name == 'manager' or user.is_superuser %}
-                      {% if newsletter.is_blocked %}
-                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Разблокировать</a>
-                      {% else %}
-                      <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Заблокировать</a>
-                      {% endif %}
-                      {% endif %}
+                <div class="col">
+                  <div class="card shadow-sm">
+                    <div class="card-body">
+                      <p class="card-text">Сообщение: {{ newsletter.message }}</p>
+                      <p class="card-text">Статус рассылки: {{ newsletter.status }}. Дата и время завершения : {{ newsletter.date_and_time_of_end_of_sending }}</p>
+                      <p class="card-text"></p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                          <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_detail' newsletter.pk %}" role="button">Посмотреть</a>
+                          {% if user.groups.get.name != 'manager' %}
+                              <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_update' newsletter.pk %}" role="button">Редактировать</a>
+                              <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_delete' newsletter.pk %}" role="button">Удалить</a>
+                              {% if newsletter.status != 'completed' %}
+                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:attempttosend_create' %}" role="button">Запустить</a>
+                              {% else %}
+                                <a class="btn btn-sm btn-warning" >Заблокирована</a>
+                              {% endif %}
+                          {% endif %}
+                          {% if user.groups.get.name == 'manager' or user.is_superuser %}
+                              {% if newsletter.status == 'completed' %}
+                                <a class="btn btn-sm btn-warning" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Завершена</a>
+                              {% else %}
+                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Заблокировать</a>
+                              {% endif %}
+                          {% endif %}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
             {% endfor %}
         </div>
   </div>

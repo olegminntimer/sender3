@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic import DeleteView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
@@ -7,12 +7,12 @@ from django.core.exceptions import PermissionDenied
 
 from .forms import RecipientForm, MessageForm, NewsletterForm, NewsletterBlockForm, AttemptToSendForm
 from .models import Recipient, Newsletter, Message, AttemptToSend
-from .servicies import start_of_mailing
+from .servicies import start_of_mailing, get_recipients_from_cache, get_messages_from_cache
 
 
 def main_view(request):
     if request.user.is_superuser:
-        recipients = Recipient.objects.all()
+        recipients = get_recipients_from_cache
         newsletters = Newsletter.objects.all()
         newsletters_launched = Newsletter.objects.filter(status='launched')
         context = {
@@ -39,7 +39,7 @@ class RecipientListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.has_perm('send.can_view_recipient'):
-            context["recipients"] = Recipient.objects.all()
+            context["recipients"] = get_recipients_from_cache
             return context
         context["recipients"] = Recipient.objects.filter(owner=self.request.user)
         return context
@@ -83,7 +83,7 @@ class MessageListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.has_perm('send.can_view_message'):
-            context["messages"] = Message.objects.all()
+            context["messages"] = get_messages_from_cache
             return context
         context["messages"] = Message.objects.filter(owner=self.request.user)
         return context
@@ -168,11 +168,10 @@ class AttemptToSendListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["attempttosends"] = AttemptToSend.objects.all()
-        # if self.request.user.has_perm('send.can_view_newsletter'):
-        #     context["attempttosends"] = AttemptToSend.objects.all()
-        #     return context
-        # context["attempttosends"] = AttemptToSend.objects.filter(owner=self.request.user)
+        if self.request.user.has_perm('send.can_view_newsletter'):
+            context["attempttosends"] = AttemptToSend.objects.all()
+            return context
+        context["attempttosends"] = AttemptToSend.objects.filter(owner=self.request.user)
         return context
 
 
@@ -183,4 +182,6 @@ class AttemptToSendCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
+        start_of_mailing(form.instance.newsletter)
+        # form.instance.newsletter = self.request.newsletters.get(str(self.kwargs.get("id")))
         return super().form_valid(form)

@@ -34,10 +34,10 @@ class NewsletterForm(StyleFormMixin, ModelForm):
 class NewsletterBlockForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Newsletter
-        fields = ("is_blocked",)
+        fields = ("status",)
 
 
 class AttemptToSendForm(StyleFormMixin, ModelForm):
     class Meta:
         model = AttemptToSend
-        fields = ("newsletter",)
+        fields = ("status",)
