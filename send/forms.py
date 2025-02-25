@@ -28,7 +28,7 @@ class MessageForm(StyleFormMixin, ModelForm):
 class NewsletterForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Newsletter
-        exclude = ("owner", "is_blocked")
+        fields = ("date_and_time_of_end_of_sending", "message", "recipients")
 
 
 class NewsletterBlockForm(StyleFormMixin, ModelForm):

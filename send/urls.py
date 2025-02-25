@@ -27,5 +27,5 @@ urlpatterns = [
     path("newsletters/<int:pk>/block/", NewsletterBlockView.as_view(), name="newsletter_block"),
     path("newsletters/<int:pk>/delete/", NewsletterDeleteView.as_view(), name="newsletter_delete"),
     path("attempttosend/", AttemptToSendListView.as_view(), name="attempttosend_list"),
-    path("attempttosend/create/", AttemptToSendCreateView.as_view(), name="attempttosend_create"),
+    # path("attempttosend/create/", AttemptToSendCreateView.as_view(), name="attempttosend_create"),
 ]

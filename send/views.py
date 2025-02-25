@@ -4,10 +4,13 @@ from django.views.generic import DeleteView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
+from django.utils import timezone
+from django.core.mail import send_mail
 
+from config.settings import EMAIL_HOST_USER
 from .forms import RecipientForm, MessageForm, NewsletterForm, NewsletterBlockForm, AttemptToSendForm
 from .models import Recipient, Newsletter, Message, AttemptToSend
-from .servicies import start_of_mailing, get_recipients_from_cache, get_messages_from_cache
+from .servicies import get_recipients_from_cache, get_messages_from_cache
 
 
 def main_view(request):
@@ -185,3 +188,32 @@ class AttemptToSendCreateView(LoginRequiredMixin, CreateView):
         start_of_mailing(form.instance.newsletter)
         # form.instance.newsletter = self.request.newsletters.get(str(self.kwargs.get("id")))
         return super().form_valid(form)
+
+@staticmethod
+def start_of_mailing(newsletter):
+    if isinstance(newsletter, Newsletter):
+        newsletter.date_and_time_of_first_dispatch = timezone.now()
+        newsletter.status = "Запущена"
+        newsletter.save()
+
+        subject = newsletter.message.subject
+        message = newsletter.message.letter_body
+        recipients = [recipient.email for recipient in newsletter.recipients.all()]
+        for recipient in recipients:
+            ats = AttemptToSend(
+                date_and_time_of_attempt=timezone.now(),
+                mail_server_response="",
+                newsletter=newsletter,
+            )
+            try:
+                send_mail(
+                    subject,
+                    message,
+                    EMAIL_HOST_USER,
+                    [recipient,]
+                )
+            except Exception as e:
+                ats.status = "Не успешно"
+                ats.mail_server_response = str(e),
+            else:
+                ats.status = "Успешно"

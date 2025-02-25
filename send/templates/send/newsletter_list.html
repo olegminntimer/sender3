@@ -29,7 +29,7 @@
                               {% if newsletter.status != 'completed' %}
                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:attempttosend_create' %}" role="button">Запустить</a>
                               {% else %}
-                                <a class="btn btn-sm btn-warning" >Заблокирована</a>
+                                <a class="btn btn-sm btn-warning" >Завершена</a>
                               {% endif %}
                           {% endif %}
                           {% if user.groups.get.name == 'manager' or user.is_superuser %}
