@@ -1,6 +1,6 @@
 from django.forms import ModelForm, BooleanField
 
-from send.models import Recipient, Message, Newsletter
+from send.models import Recipient, Message, Newsletter, AttemptToSend
 
 
 class StyleFormMixin:
@@ -35,3 +35,9 @@ class NewsletterBlockForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Newsletter
         fields = ("is_blocked",)
+
+
+class AttemptToSendForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = AttemptToSend
+        fields = ("newsletter",)

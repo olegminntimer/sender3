@@ -4,7 +4,7 @@ from send.apps import SendConfig
 from send.views import RecipientCreateView, RecipientListView, main_view, RecipientUpdateView, RecipientDetailView, \
     RecipientDeleteView, MessageListView, MessageDetailView, MessageCreateView, MessageUpdateView, MessageDeleteView, \
     NewsletterListView, NewsletterDetailView, NewsletterCreateView, NewsletterUpdateView, NewsletterDeleteView, \
-    NewsletterBlockView
+    NewsletterBlockView, AttemptToSendCreateView
 
 app_name = SendConfig.name
 
@@ -26,4 +26,5 @@ urlpatterns = [
     path("newsletters/<int:pk>/update/", NewsletterUpdateView.as_view(), name="newsletter_update"),
     path("newsletters/<int:pk>/block/", NewsletterBlockView.as_view(), name="newsletter_block"),
     path("newsletters/<int:pk>/delete/", NewsletterDeleteView.as_view(), name="newsletter_delete"),
+    path("attempttosend/create/", AttemptToSendCreateView.as_view(), name="attempttosend_create"),
 ]

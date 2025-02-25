@@ -178,6 +178,14 @@ class AttemptToSend(models.Model):
         on_delete=models.SET_NULL,
         related_name="attempts_to_send",
     )
+    owner = models.ForeignKey(
+        CustomUser,
+        verbose_name="Владелец попытки рассылки",
+        help_text="Укажите владельца попытки рассылки",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )  # Владелец попытки рассылки.
 
     class Meta:
         verbose_name = "попытка рассылки"
