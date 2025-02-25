@@ -163,7 +163,7 @@ class AttemptToSend(models.Model):
         help_text="Дата и время попытки рассылки",
     )
     # Статус (строка: 'Успешно', 'Не успешно').
-    status = models.CharField(max_length=16, choices=STATUS, verbose_name="Статус попытки рассылки")
+    status = models.CharField(max_length=16, choices=STATUS, blank=True, null=True, verbose_name="Статус попытки рассылки")
     # Ответ почтового сервера (текст).
     mail_server_response = models.CharField(
         max_length=200, blank=True, null=True, verbose_name="Ответ почтового сервера"

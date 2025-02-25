@@ -1,0 +1,23 @@
+{% extends 'send/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Попытки рассылки</h1>
+</div>
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 g-3">
+            {% for attempttosend in attempttosends %}
+            <div class="col">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <p class="card-text">Дата и время попытки: {{ attempttosend.date_and_time_of_attempt }}. Статус попытки рассылки: {{ attempttosend.status }}</p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
