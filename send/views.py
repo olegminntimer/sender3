@@ -171,10 +171,7 @@ class AttemptToSendListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.has_perm('send.can_view_newsletter'):
-            context["attempttosends"] = AttemptToSend.objects.all()
-            return context
-        context["attempttosends"] = AttemptToSend.objects.filter(owner=self.request.user)
+        context['attempttosends'] = AttemptToSend.objects.select_related('newsletter')
         return context
 
 
@@ -198,6 +195,7 @@ def start_of_mailing(newsletter):
 
         subject = newsletter.message.subject
         message = newsletter.message.letter_body
+
         recipients = [recipient.email for recipient in newsletter.recipients.all()]
         for recipient in recipients:
             ats = AttemptToSend(
