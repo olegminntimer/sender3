@@ -85,14 +85,14 @@ class Newsletter(models.Model):
         (LAUNCHED, "Запущена"),
     ]
     # Дата и время первой отправки (datetime)
-    date_and_time_of_first_dispatch = models.DateTimeField(
+    first_dispatch = models.DateTimeField(
         blank=True,
         null=True,
         verbose_name="Первая отправка",
         help_text="Дата и время первой отправки",
     )
     # Дата и время окончания отправки (datetime)
-    date_and_time_of_end_of_sending = models.DateTimeField(
+    end_of_sending = models.DateTimeField(
         blank=True,
         null=True,
         verbose_name="Окончание отправки",
@@ -129,14 +129,14 @@ class Newsletter(models.Model):
         verbose_name = "рассылка"
         verbose_name_plural = "рассылки"
         ordering = [
-            "date_and_time_of_first_dispatch",
+            "id",
         ]
         permissions = [
             ("can_view_newsletter", "Can view Newsletter"),
         ]
 
     def __str__(self):
-        return f"{self.date_and_time_of_first_dispatch} {self.status}"
+        return f"{self.first_dispatch} {self.status}"
 
 
 class AttemptToSend(models.Model):
@@ -150,7 +150,7 @@ class AttemptToSend(models.Model):
         (NOT_SUCCESSFULLY, "Не успешно"),
     ]
     # Дата и время попытки (datetime).
-    date_and_time_of_attempt = models.DateTimeField(
+    attempt = models.DateTimeField(
         auto_now=True,
         blank=True,
         null=True,
@@ -186,8 +186,8 @@ class AttemptToSend(models.Model):
         verbose_name = "попытка рассылки"
         verbose_name_plural = "попытки рассылки"
         ordering = [
-            "date_and_time_of_attempt",
+            "attempt",
         ]
 
     def __str__(self):
-        return f"{self.date_and_time_of_attempt} {self.status}"
+        return f"{self.attempt} {self.status}"

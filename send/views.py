@@ -1,14 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.views.generic import DeleteView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
+from django.views import View
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
-from django.utils import timezone
-from django.core.mail import send_mail
 
-from config.settings import EMAIL_HOST_USER
-from .forms import RecipientForm, MessageForm, NewsletterForm, NewsletterBlockForm, AttemptToSendForm
+from config.settings import DEFAULT_FROM_EMAIL
+from .forms import RecipientForm, MessageForm, NewsletterForm, NewsletterBlockForm, AttemptToSendNewsletterForm
 from .models import Recipient, Newsletter, Message, AttemptToSend
 from .servicies import get_recipients_from_cache, get_messages_from_cache
 
@@ -165,6 +166,40 @@ class NewsletterDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("send:newsletter_list")
 
 
+class SendNewsletterView(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+        # Получаем объект рассылки
+        newsletter = Newsletter.objects.get(pk=pk, owner=request.user)
+        message = newsletter.message
+        recipients = newsletter.recipients.all()
+        mail_server_response = None
+
+        # Отправляем сообщения каждому получателю
+        for recipient in recipients:
+            try:
+                send_mail(
+                    message.subject,
+                    message.letter_body,
+                    DEFAULT_FROM_EMAIL,
+                    [recipient.email],
+                )
+                AttemptToSend.objects.create(
+                    status="Успешно", mail_server_response=f"Успешно отправлено на {recipient.email}", newsletter=newsletter
+                )
+            except Exception as e:
+                mail_server_response = f"Письмо не отправлено на {recipient.email}: {e}"
+                AttemptToSend.objects.create(status="Не успешно", mail_server_response=mail_server_response, newsletter=newsletter)
+        # Отправляем сообщение об успехе и перенаправляем
+        if AttemptToSend.objects.filter(newsletter=newsletter).order_by("id").first().status == "Успешно":
+            messages.success(request, f"Письмо успешно отправлено на {recipient.email}")
+        else:
+            messages.warning(request, mail_server_response)
+        newsletter.status = "FINISHED"
+        newsletter.save()
+        return redirect("send:newsletter_list")
+
+
 class AttemptToSendListView(LoginRequiredMixin, ListView):
     model = AttemptToSend
     context_object_name = 'attempttosends'
@@ -173,45 +208,41 @@ class AttemptToSendListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['attempttosends'] = AttemptToSend.objects.select_related('newsletter')
         return context
-
+# class AttemptToSendListView(ListView):
+#     model = AttemptToSend
+#     template_name = 'send/attempttosend_list.html'
+#     context_object_name = 'attempttosends'
+#
+#     def get_queryset(self):
+#         newsletter_id = self.kwargs.get('newsletter_pk')
+#         print(newsletter_id)
+#         if newsletter_id:
+#             return get_attempttosend_from_newsletter(newsletter_id)
+#         else:
+#             return AttemptToSend.objects.none()
+#
+#     def get(self, request, *args, **kwargs):
+#         form = AttemptToSendSearchForm()
+#         return render(request, self.template_name, {'form': form, 'attempttosends': self.get_queryset()})
+#
+#
+#     def post(self, request, *args, **kwargs):
+#         form = AttemptToSendSearchForm(request.POST)
+#         if form.is_valid():
+#             newsletter_id = form.cleaned_data['newsletter']
+#             return self.get_queryset(newsletter_id)
+#         else:
+#             return render(request, self.template_name, {'form': form})
 
 class AttemptToSendCreateView(LoginRequiredMixin, CreateView):
-    model = AttemptToSend
-    form_class = AttemptToSendForm
+    model = Newsletter
+    form_class = AttemptToSendNewsletterForm
     success_url = reverse_lazy("send:newsletter_list")
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
-        start_of_mailing(form.instance.newsletter)
+        # form.instance.owner = self.request.user
+        start_of_mailing(self)
         # form.instance.newsletter = self.request.newsletters.get(str(self.kwargs.get("id")))
+        # sys.stdout.write(str(self.request.user))
         return super().form_valid(form)
 
-@staticmethod
-def start_of_mailing(newsletter):
-    if isinstance(newsletter, Newsletter):
-        newsletter.date_and_time_of_first_dispatch = timezone.now()
-        newsletter.status = "Запущена"
-        newsletter.save()
-
-        subject = newsletter.message.subject
-        message = newsletter.message.letter_body
-
-        recipients = [recipient.email for recipient in newsletter.recipients.all()]
-        for recipient in recipients:
-            ats = AttemptToSend(
-                date_and_time_of_attempt=timezone.now(),
-                mail_server_response="",
-                newsletter=newsletter,
-            )
-            try:
-                send_mail(
-                    subject,
-                    message,
-                    EMAIL_HOST_USER,
-                    [recipient,]
-                )
-            except Exception as e:
-                ats.status = "Не успешно"
-                ats.mail_server_response = str(e),
-            else:
-                ats.status = "Успешно"

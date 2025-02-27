@@ -24,8 +24,8 @@ class MessageAdmin(admin.ModelAdmin):
 @admin.register(Newsletter)
 class NewsletterAdmin(admin.ModelAdmin):
     list_display = (
-        "date_and_time_of_first_dispatch",
-        "date_and_time_of_end_of_sending",
+        "first_dispatch",
+        "end_of_sending",
         "status",
         "message",
     )
@@ -36,7 +36,7 @@ class NewsletterAdmin(admin.ModelAdmin):
 @admin.register(AttemptToSend)
 class AttemptToSendAdmin(admin.ModelAdmin):
     list_display = (
-        "date_and_time_of_attempt",
+        "attempt",
         "status",
         "mail_server_response",
         "newsletter",

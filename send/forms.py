@@ -1,4 +1,4 @@
-from django.forms import ModelForm, BooleanField
+from django.forms import ModelForm, BooleanField, ChoiceField
 
 from send.models import Recipient, Message, Newsletter, AttemptToSend
 
@@ -28,7 +28,7 @@ class MessageForm(StyleFormMixin, ModelForm):
 class NewsletterForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Newsletter
-        fields = ("date_and_time_of_end_of_sending", "message", "recipients")
+        fields = ("end_of_sending", "message", "recipients")
 
 
 class NewsletterBlockForm(StyleFormMixin, ModelForm):
@@ -40,4 +40,21 @@ class NewsletterBlockForm(StyleFormMixin, ModelForm):
 class AttemptToSendForm(StyleFormMixin, ModelForm):
     class Meta:
         model = AttemptToSend
-        fields = ("status",)
+        fields = ("mail_server_response",)
+
+
+class AttemptToSendNewsletterForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = AttemptToSend
+        fields = ("mail_server_response",)
+
+class AttemptToSendSearchForm(ModelForm):
+    newsletter = ChoiceField()
+
+    class Meta:
+        model = AttemptToSend
+        fields = ['newsletter']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['newsletter'].choices = [(newsletter.id, newsletter.date_and_time_of_first_dispatch) for newsletter in Newsletter.objects.all()]

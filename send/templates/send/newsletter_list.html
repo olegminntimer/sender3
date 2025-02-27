@@ -1,51 +1,41 @@
 {% extends 'send/base.html' %}
 {% block content %}
 {% if user.is_authenticated %}
-<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-      <h1 class="display-4 fw-normal text-body-emphasis">Рассылки</h1>
-</div>
-{% if user.groups.get.name != 'manager' or user.is_superuser %}
-<div class="d-grid gap-2 col-6 mx-auto">
-  <a class="btn btn-outline-primary" href="{% url 'send:newsletter_create' %}" role="button">Добавить рассылку</a>
-</div>
-{% endif %}
-{% endif %}
-<div class="album py-5 bg-body-tertiary">
-    <div class="container">
-        <div class="row row-cols-1 g-3">
-            {% for newsletter in newsletters %}
-                <div class="col">
-                  <div class="card shadow-sm">
-                    <div class="card-body">
-                      <p class="card-text">Сообщение: {{ newsletter.message }}</p>
-                      <p class="card-text">Статус рассылки: {{ newsletter.status }}. Дата и время завершения : {{ newsletter.date_and_time_of_end_of_sending }}</p>
-                      <p class="card-text"></p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_detail' newsletter.pk %}" role="button">Посмотреть</a>
-                          {% if user.groups.get.name != 'manager' %}
-                              <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_update' newsletter.pk %}" role="button">Редактировать</a>
-                              <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_delete' newsletter.pk %}" role="button">Удалить</a>
-                              {% if newsletter.status != 'completed' %}
-                                <a class="btn btn-sm btn-outline-secondary" href="" role="button">Запустить</a>
-                              {% else %}
-                                <a class="btn btn-sm btn-warning" >Завершена</a>
-                              {% endif %}
-                          {% endif %}
-                          {% if user.groups.get.name == 'manager' or user.is_superuser %}
-                              {% if newsletter.status == 'completed' %}
-                                <a class="btn btn-sm btn-warning" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Завершена</a>
-                              {% else %}
-                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_block' newsletter.pk %}" role="button">Заблокировать</a>
-                              {% endif %}
-                          {% endif %}
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+          <h1 class="display-4 fw-normal text-body-emphasis">Рассылки</h1>
+    </div>
+    {% if user.groups.get.name != 'manager' %}
+        <div class="d-grid gap-2 col-6 mx-auto">
+          <a class="btn btn-outline-primary" href="{% url 'send:newsletter_create' %}" role="button">Добавить рассылку</a>
+        </div>
+    {% endif %}
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+            <div class="row row-cols-1 g-3">
+                {% for newsletter in newsletters %}
+                    <div class="col">
+                      <div class="card shadow-sm">
+                        <div class="card-body">
+                        <p class="card-text">Рассылка № {{ newsletter.pk }}</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div class="btn-group">
+                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_detail' newsletter.pk %}" role="button">Посмотреть</a>
+                                {% if user.groups.get.name != 'manager' %}
+                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_update' newsletter.pk %}" role="button">Редактировать</a>
+                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'send:newsletter_delete' newsletter.pk %}" role="button">Удалить</a>
+                                <form action="{% url 'send:newsletter_send' newsletter.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success mx-1">Отправить</button>
+                                </form>
+                                {% endif %}
+                              </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-            {% endfor %}
-        </div>
-  </div>
-</div>
+                {% endfor %}
+            </div>
+      </div>
+    </div>
+{% endif %}
 {% endblock %}

@@ -1,4 +1,4 @@
-from config.settings import CACHE_ENABLED
+from config.settings import CACHE_ENABLED, EMAIL_HOST_USER
 from django.core.cache import cache
 from send.models import Recipient, Message
 
