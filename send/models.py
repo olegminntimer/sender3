@@ -171,7 +171,7 @@ class AttemptToSend(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name="attempts_to_send",
+        related_name="attempt_to_send_list",
     )
     # owner = models.ForeignKey(
     #     CustomUser,
