@@ -1,0 +1,24 @@
+{% extends 'send/base.html' %}
+{% block title %}Получатель{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="d-grid gap-2 col-6 mx-auto">
+            {% if object %}
+            <h1 class="mb-4">Редактирование Получателя</h1>
+            {% else %}
+            <h1 class="mb-4">Добавление Получателя</h1>
+            {% endif %}
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">
+                        {% if object %}
+                        Сохранить
+                        {% else %}
+                        Создать
+                        {% endif %}
+            </button>
+        </form>
+    </div>
+{% endblock %}
